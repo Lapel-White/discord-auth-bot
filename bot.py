@@ -5,7 +5,7 @@ import aiohttp
 
 # ──────────────────────────────────────────────
 # [설정 영역] 본인의 디스코드 봇 정보와 채널/역할 ID를 입력하세요
-TOKEN = "MTU2NTk1Nzg4NzA2OTY1OTMyNg.Gj9SSD.oSmS21qV_fGbKKT0OH526rPIV6sHO82e5rZGLc"
+TOKEN = "MTU2NTk1Nzg4NzA2OTY1OTMyNg.GkRSg4.v00RvPpRYPY0Zrg1QrCsn9QGTCWdYYL0WKm9gI"
 CLIENT_ID = "1565957887069659326"
 CLIENT_SECRET = "eGG72Szkt9o6Elrsg2xwXDNpJc-xhIF2"
 REDIRECT_URI = "http://localhost:5000/callback"
