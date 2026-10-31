@@ -1,3 +1,4 @@
+import os
 import discord
 from discord import app_commands
 from aiohttp import web
@@ -5,14 +6,16 @@ import aiohttp
 
 # ──────────────────────────────────────────────
 # [설정 영역] 본인의 디스코드 봇 정보와 채널/역할 ID를 입력하세요
-TOKEN = "MTU2NTk1Nzg4NzA2OTY1OTMyNg.GkRSg4.v00RvPpRYPY0Zrg1QrCsn9QGTCWdYYL0WKm9gI"
+# 🚨 토큰은 이제 코드에 직접 적지 않고 Render 환경 변수(DISCORD_TOKEN)에서 안전하게 불러옵니다!
+TOKEN = os.environ.get('DISCORD_TOKEN')
+
 CLIENT_ID = "1565957887069659326"
 CLIENT_SECRET = "eGG72Szkt9o6Elrsg2xwXDNpJc-xhIF2"
 REDIRECT_URI = "http://localhost:5000/callback"
 
-RECOVERY_GUILD_ID = 1565964822628143205  # 복구 대상 디스코드 서버 ID (숫자만)
-LOG_CHANNEL_ID = 1565965179336785982     # 인증 완료 로그가 쌓일 채널 ID (숫자만)
-ROLE_ID = 1565966286377189457            # 인증 완료 시 부여할 역할 ID (숫자만 입력)
+RECOVERY_GUILD_ID = 1565964822628143205   # 복구 대상 디스코드 서버 ID (숫자만)
+LOG_CHANNEL_ID = 1565965179336785982      # 인증 완료 로그가 쌓일 채널 ID (숫자만)
+ROLE_ID = 1565966286377189457             # 인증 완료 시 부여할 역할 ID (숫자만 입력)
 # ──────────────────────────────────────────────
 
 intents = discord.Intents.default()
@@ -133,12 +136,15 @@ async def start_web_server():
     app.router.add_get('/callback', handle_callback)
     runner = web.AppRunner(app)
     await runner.setup()
-    site = web.TCPSite(runner, 'localhost', 5000)
+    site = web.TCPSite(runner, '0.0.0.0', 8080)  # Render 외부 접속을 위해 0.0.0.0과 포트 8080으로 설정
     await site.start()
-    print("인증 콜백 웹 서버가 5000번 포트에서 실행 중입니다.")
+    print("인증 콜백 웹 서버가 8080번 포트에서 실행 중입니다.")
 
 # 봇 실행 시 웹서버도 함께 구동
 async def main():
+    if not TOKEN:
+        print("오류: DISCORD_TOKEN 환경 변수가 설정되지 않았습니다.")
+        return
     await start_web_server()
     await client.start(TOKEN)
 
